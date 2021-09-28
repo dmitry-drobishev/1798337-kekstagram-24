@@ -13,7 +13,7 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-console.log(getRandomIntInclusive(-100, 1000.2));
+getRandomIntInclusive(-100, 1000.2);
 
 // Функция для проверки максимальной длины строки.
 
@@ -21,4 +21,4 @@ function stringLengthCheck(myString, maxLength) {
   return myString.length <= maxLength;
 }
 
-console.log(stringLengthCheck('строка', 10));
+stringLengthCheck('строка', 10);
