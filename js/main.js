@@ -10,30 +10,7 @@ function getRandomIntInclusive(min, max) {
   throw new Error('Некорректное значение аргумента');
 }
 
-// getRandomIntInclusive(-100, 101);
-
-// Функция для проверки максимальной длины строки.
-// function stringLengthCheck(myString, maxLength) {
-//   return myString.length <= maxLength;
-// }
-
-// stringLengthCheck();
-
 // Функции для создания массива из 25 сгенерированных объектов.
-// Структура каждого объекта должна быть следующей:
-// id, число — идентификатор описания. Это число от 1 до 25. Идентификаторы не должны повторяться.
-// url, строка — адрес картинки вида photos/{{i}}.jpg, где {{i}} — это число от 1 до 25. Адреса картинок не должны повторяться.
-// description, строка — описание фотографии. Описание придумайте самостоятельно.
-// likes, число — количество лайков, поставленных фотографии. Случайное число от 15 до 200.
-// comments, массив объектов — список комментариев, оставленных другими пользователями к этой фотографии. Количество комментариев к каждой фотографии вы определяете на своё усмотрение. Все комментарии генерируются случайным образом. Пример описания объекта с комментарием:
-
-// У каждого комментария есть идентификатор — id — случайное число. Идентификаторы не должны повторяться.
-
-// Поле avatar — это строка, значение которой формируется по правилу img/avatar-{{случайное число от 1 до 6}}.svg. Аватарки подготовлены в директории img.
-
-// Для формирования текста комментария — message — вам необходимо взять одно или два случайных предложения/
-
-
 const NAMES = [
   'Роман',
   'Рамзан',
@@ -84,55 +61,47 @@ const COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
-
 const MIN_LIKES_VALUE = 15;
 const MAX_LIKES_VALUE = 200;
-const POSTS_VALUE = 5; // 25
-const myArray = [];
-let commentsId = [];
+const POSTS_VALUE = 25;
+const postArray = [];
+const commentsId = [];
 const tries = 10;
 
 const createRandomId = (postId) => {
-  for (let j = 0; j <= tries; j++) {
-    let newId = parseInt(`${postId}${getRandomIntInclusive(0, 1000)}`,10);
-    if (commentsId.includes(newId)) {
-      continue;
-    } else {
+  for (let tryNumber = 0; tryNumber <= tries; tryNumber++) {
+    const newId = parseInt(`${postId}${getRandomIntInclusive(0, 1000)}`,10);
+    if (!commentsId.includes(newId)) {
       commentsId.push(commentsId);
       return newId;
     }
   }
-
-//   commentsId.forEach(
-
-//   )
-//     if (newId != commentsId[j]) {
-//       commentsId.push
-//     }
-//   }
 };
 
-const createComments = (postId) => ({
-  id: createRandomId(postId),
-  avatar: `img/avatar-${getRandomIntInclusive(1, 6)}.svg`,
-  message: COMMENTS[getRandomIntInclusive(0, COMMENTS.length - 1)],
-  name: NAMES[getRandomIntInclusive(0, NAMES.length - 1)],
-});
+const createComments = (postId, commentsValue = 1) => {
+  const commentsArray = [];
+  for (let commentsCounter = 0; commentsCounter < commentsValue; commentsCounter++) {
+    commentsArray.push({
+      id: createRandomId(postId),
+      avatar: `img/avatar-${getRandomIntInclusive(1, 6)}.svg`,
+      message: COMMENTS[getRandomIntInclusive(0, COMMENTS.length - 1)],
+      name: NAMES[getRandomIntInclusive(0, NAMES.length - 1)],
+    });
+  }
+  return commentsArray;
+};
 
-const createPost = (i) => ({
-  id: i,
-  url: `photos${i}.jpg`,
+const createPost = (postId) => ({
+
+  id: postId,
+  url: `photos${postId}.jpg`,
   description: DESCRIPTIONS[getRandomIntInclusive(0, DESCRIPTIONS.length - 1)],
   like: getRandomIntInclusive(MIN_LIKES_VALUE, MAX_LIKES_VALUE),
-  comments: Array.from({length: 2}, createComments),
+  comments: createComments(postId, 3),
 });
 
-
-for (let i = 1; i <= POSTS_VALUE; i++) {
-  myArray.push(createComments(i));
-  // myArray = Array.from({length: 3}, createComments);
+for (let postId = 1; postId <= POSTS_VALUE; postId++) {
+  postArray.push(createPost(postId));
 }
+// console.log(postArray);
 
-// console.log(myArray);
-
-console.log(Array.from({length: 3}, createComments));
