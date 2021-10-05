@@ -10,13 +10,6 @@ function getRandomIntInclusive(min, max) {
   throw new Error('Некорректное значение аргумента');
 }
 
-// Функция для проверки максимальной длины строки.
-function stringLengthCheck(myString, maxLength) {
-  return myString.length <= maxLength;
-}
-
-stringLengthCheck();
-
 // Функции для создания массива из 25 сгенерированных объектов.
 const NAMES = [
   'Роман',
@@ -78,14 +71,18 @@ const tries = 10;
 const createRandomId = (postId) => {
   for (let tryNumber = 0; tryNumber <= tries; tryNumber++) {
     const newId = parseInt(`${postId}${getRandomIntInclusive(0, 1000)}`,10);
-    if (commentsId.includes(newId)) {
-      continue;
-    } else {
+    if (!commentsId.includes(newId)) {
       commentsId.push(commentsId);
       return newId;
     }
+
+    // if (commentsId.includes(newId)) {
+    //   continue;
+    // } else {
+    //   commentsId.push(commentsId);
+    //   return newId;
+    // }
   }
-  throw new Error('Не удалось получить уникальный id');
 };
 
 const createComments = (postId) => ({
@@ -100,7 +97,7 @@ const createPost = (postId) => ({
   url: `photos${postId}.jpg`,
   description: DESCRIPTIONS[getRandomIntInclusive(0, DESCRIPTIONS.length - 1)],
   like: getRandomIntInclusive(MIN_LIKES_VALUE, MAX_LIKES_VALUE),
-  comments: Array.from({length: 2}, createComments),
+  comments: Array.from({length: 2}, postId, createComments),
 });
 
 for (let postId = 1; postId <= POSTS_VALUE; postId++) {
@@ -108,3 +105,5 @@ for (let postId = 1; postId <= POSTS_VALUE; postId++) {
 }
 
 // console.log(postArray);
+// console.log(createComments(7));
+
