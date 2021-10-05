@@ -103,10 +103,3 @@ for (let postId = 1; postId <= POSTS_VALUE; postId++) {
   postArray.push(createPost(postId));
 }
 // console.log(postArray);
-
-<<<<<<< HEAD
-=======
-// console.log(postArray);
-// console.log(createComments(7));
-
->>>>>>> b49cb047ccde71a67738a4b8255755834d8f3c24
