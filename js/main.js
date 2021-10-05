@@ -72,12 +72,12 @@ const MIN_LIKES_VALUE = 15;
 const MAX_LIKES_VALUE = 200;
 const POSTS_VALUE = 25;
 const postArray = [];
-let commentsId = [];
+const commentsId = [];
 const tries = 10;
 
 const createRandomId = (postId) => {
   for (let tryNumber = 0; tryNumber <= tries; tryNumber++) {
-    let newId = parseInt(`${postId}${getRandomIntInclusive(0, 1000)}`,10);
+    const newId = parseInt(`${postId}${getRandomIntInclusive(0, 1000)}`,10);
     if (commentsId.includes(newId)) {
       continue;
     } else {
