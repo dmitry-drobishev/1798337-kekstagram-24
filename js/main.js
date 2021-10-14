@@ -1,4 +1,4 @@
 import { createPosts } from './utils/create-posts.js';
+import { createMinPictures } from './utils/create-min-pictures.js';
 
-// console.log(createPosts(2));
-createPosts();
+createMinPictures(createPosts(15));

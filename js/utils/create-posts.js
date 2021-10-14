@@ -82,7 +82,7 @@ const createComments = (postId, commentsValue = 1) => {
 
 const createPost = (postId) => ({
   id: postId,
-  url: `photos${postId}.jpg`,
+  url: `photos/${postId}.jpg`,
   description: DESCRIPTIONS[getRandomPositiveInteger(0, DESCRIPTIONS.length - 1)],
   like: getRandomPositiveInteger(MIN_LIKES_VALUE, MAX_LIKES_VALUE),
   comments: createComments(postId, 3),
