@@ -30,8 +30,31 @@ function closePhotoModal () {
 
   document.addEventListener('keydown', onModalEscKeydown);
   openModalButton.value = null;
-  formModal.value.remove();
+  formModal.reset();
 }
+
+const stopEscEvent = (evt) => {
+  if (isEscKey(evt)) {
+    evt.stopPropagation();
+  }
+};
+
+const testHashtagsArrayOnReg = (hashtagsArray) => {
+  for (let hashtag = 0; hashtag < hashtagsArray.length; hashtag++) {
+    if (!reHashtags.test(hashtagsArray[hashtag])) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const testHashtagsArrayOnUnique = (hashtagsArray) => {
+  const uniqueHashtags = Array.from(new Set(hashtagsArray));
+  if (hashtagsArray.length !== uniqueHashtags.length) {
+    return false;
+  }
+  return true;
+};
 
 openModalButton.addEventListener('change', () => {
   openPhotoModal ();
@@ -41,12 +64,6 @@ closeModalButton.addEventListener('click', () => {
   closePhotoModal ();
 });
 
-const stopEscEvent = (evt) => {
-  if (isEscKey(evt)) {
-    evt.stopPropagation();
-  }
-};
-
 userCommentInput.addEventListener('keydown', (evt) => {
   stopEscEvent(evt);
 });
@@ -55,44 +72,19 @@ userHashtagInput.addEventListener('keydown', (evt) => {
   stopEscEvent(evt);
 });
 
-// userHashtagInput.addEventListener('input', () => {
-
-//   const hashtagsArray = userHashtagInput.value.split(' ');
-
-//   for (let hashtag = 0; hashtag < hashtagsArray.length; hashtag++) {
-//     if (reHashtags.test(hashtagsArray[hashtag])) {
-//       userHashtagInput.setCustomValidity('');
-//     } else {
-//       userHashtagInput.setCustomValidity('хэш-тег начинается с символа "#", строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д., хеш-тег не может состоять только из одной решётки, максимальная длина одного хэш-тега 20 символов, включая решётку, хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом, хэш-теги разделяются пробелами');
-//       break;
-//     }
-//   }
-
-//   if (hashtagsArray.length > MAX_HASHTEG_LENGTH) {
-//     userHashtagInput.setCustomValidity(`Удалите лишние ${  hashtagsArray.length - MAX_HASHTEG_LENGTH } хештега.`);
-//   } else {
-//     userHashtagInput.setCustomValidity('');
-//   }
-
-//   userHashtagInput.reportValidity();
-// });
-
-
-const testHashtagsArray = (hashtagsArray) => {
-  for (let hashtag = 0; hashtag < hashtagsArray.length; hashtag++) {
-    if (!reHashtags.test(hashtagsArray[hashtag])) {
-      return false;
-    }
-  }
-  return true;
-};
-
 userHashtagInput.addEventListener('input', () => {
   const hashtagsArray = userHashtagInput.value.split(' ');
-  if (!testHashtagsArray(hashtagsArray)) {
-    userHashtagInput.setCustomValidity('ошибка в оформлении');
+  if (!testHashtagsArrayOnReg(hashtagsArray)) {
+    userHashtagInput.setCustomValidity(`- хэш-тег начинается с символа # (решётка);
+    - строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;
+    - хеш-тег не может состоять только из одной решётки;
+    - максимальная длина одного хэш-тега 20 символов, включая решётку;
+    - хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом;
+    - хэш-теги разделяются пробелами;`);
   } else if (hashtagsArray.length > MAX_HASHTEG_LENGTH) {
-    userHashtagInput.setCustomValidity('нельзя указать больше пяти хэш-тегов');
+    userHashtagInput.setCustomValidity('Нельзя указывать больше пяти хэш-тегов');
+  } else if (!testHashtagsArrayOnUnique(hashtagsArray)) {
+    userHashtagInput.setCustomValidity('Хеш-теги не должны повторяться');
   } else {
     userHashtagInput.setCustomValidity('');
   }
