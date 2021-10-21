@@ -13,14 +13,14 @@ const isEscKey = (evt) => evt.key === 'Escape';
 const closePopup = () => {
   photoModal.classList.add('hidden');
   siteBody.classList.remove('.modal-open');
+  openModalButton.value = null;
+  formModal.reset();
 };
 
 const onModalEscKeydown = (evt) => {
   if (isEscKey(evt)) {
     evt.preventDefault();
     closePopup();
-    openModalButton.value = null;
-    formModal.reset();
   }
 };
 
