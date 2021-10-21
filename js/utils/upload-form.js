@@ -4,34 +4,34 @@ const siteBody = document.querySelector('body');
 const openModalButton = document.querySelector('#upload-file');
 const closeModalButton = document.querySelector('#upload-cancel');
 const userCommentInput = document.querySelector('.text__description');
-const reHashtags =  /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+const hashtagsRegexp =  /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const userHashtagInput = document.querySelector('.text__hashtags');
-const MAX_HASHTEG_LENGTH = 5;
+const MAX_HASHTAG_LENGTH = 5;
 
 const isEscKey = (evt) => evt.key === 'Escape';
 
 const onModalEscKeydown = (evt) => {
   if (isEscKey(evt)) {
     evt.preventDefault();
-    closePhotoModal ();
+    closePhotoModal();
   }
 };
 
-function openPhotoModal () {
+const openPhotoModal = () => {
   photoModal.classList.remove('hidden');
   siteBody.classList.add('.modal-open');
 
   document.addEventListener('keydown', onModalEscKeydown);
-}
+};
 
-function closePhotoModal () {
+const closePhotoModal = () => {
   photoModal.classList.add('hidden');
   siteBody.classList.remove('.modal-open');
 
-  document.addEventListener('keydown', onModalEscKeydown);
+  document.removeEventListener('keydown', onModalEscKeydown);
   openModalButton.value = null;
   formModal.reset();
-}
+};
 
 const stopEscEvent = (evt) => {
   if (isEscKey(evt)) {
@@ -40,8 +40,8 @@ const stopEscEvent = (evt) => {
 };
 
 const testHashtagsArrayOnReg = (hashtagsArray) => {
-  for (let hashtag = 0; hashtag < hashtagsArray.length; hashtag++) {
-    if (!reHashtags.test(hashtagsArray[hashtag])) {
+  for (let hashtagIndex = 0; hashtagIndex < hashtagsArray.length; hashtagIndex++) {
+    if (!hashtagsRegexp.test(hashtagsArray[hashtagIndex])) {
       return false;
     }
   }
@@ -56,23 +56,7 @@ const testHashtagsArrayOnUnique = (hashtagsArray) => {
   return true;
 };
 
-openModalButton.addEventListener('change', () => {
-  openPhotoModal ();
-});
-
-closeModalButton.addEventListener('click', () => {
-  closePhotoModal ();
-});
-
-userCommentInput.addEventListener('keydown', (evt) => {
-  stopEscEvent(evt);
-});
-
-userHashtagInput.addEventListener('keydown', (evt) => {
-  stopEscEvent(evt);
-});
-
-userHashtagInput.addEventListener('input', () => {
+const handleUserHashtagInput = () => {
   const hashtagsArray = userHashtagInput.value.split(' ');
   if (!testHashtagsArrayOnReg(hashtagsArray)) {
     userHashtagInput.setCustomValidity(`- хэш-тег начинается с символа # (решётка);
@@ -81,7 +65,7 @@ userHashtagInput.addEventListener('input', () => {
     - максимальная длина одного хэш-тега 20 символов, включая решётку;
     - хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом;
     - хэш-теги разделяются пробелами;`);
-  } else if (hashtagsArray.length > MAX_HASHTEG_LENGTH) {
+  } else if (hashtagsArray.length > MAX_HASHTAG_LENGTH) {
     userHashtagInput.setCustomValidity('Нельзя указывать больше пяти хэш-тегов');
   } else if (!testHashtagsArrayOnUnique(hashtagsArray)) {
     userHashtagInput.setCustomValidity('Хеш-теги не должны повторяться');
@@ -89,4 +73,22 @@ userHashtagInput.addEventListener('input', () => {
     userHashtagInput.setCustomValidity('');
   }
   userHashtagInput.reportValidity();
-});
+};
+
+const initUploadForm = () => {
+  openModalButton.addEventListener('change', openPhotoModal);
+
+  closeModalButton.addEventListener('click', closePhotoModal);
+
+  userCommentInput.addEventListener('keydown', (evt) => {
+    stopEscEvent(evt);
+  });
+
+  userHashtagInput.addEventListener('keydown', (evt) => {
+    stopEscEvent(evt);
+  });
+
+  userHashtagInput.addEventListener('input', handleUserHashtagInput);
+};
+
+export { initUploadForm };
