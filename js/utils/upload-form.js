@@ -10,10 +10,15 @@ const MAX_HASHTAG_LENGTH = 5;
 
 const isEscKey = (evt) => evt.key === 'Escape';
 
+const closePopup = () => {
+  photoModal.classList.add('hidden');
+  siteBody.classList.remove('.modal-open');
+};
+
 const onModalEscKeydown = (evt) => {
   if (isEscKey(evt)) {
     evt.preventDefault();
-    closePhotoModal();
+    closePopup();
   }
 };
 
@@ -25,9 +30,7 @@ const openPhotoModal = () => {
 };
 
 const closePhotoModal = () => {
-  photoModal.classList.add('hidden');
-  siteBody.classList.remove('.modal-open');
-
+  closePopup();
   document.removeEventListener('keydown', onModalEscKeydown);
   openModalButton.value = null;
   formModal.reset();
