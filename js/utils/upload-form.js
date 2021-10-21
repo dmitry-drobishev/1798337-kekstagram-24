@@ -19,21 +19,20 @@ const onModalEscKeydown = (evt) => {
   if (isEscKey(evt)) {
     evt.preventDefault();
     closePopup();
+    openModalButton.value = null;
+    formModal.reset();
   }
 };
 
 const openPhotoModal = () => {
   photoModal.classList.remove('hidden');
   siteBody.classList.add('.modal-open');
-
   document.addEventListener('keydown', onModalEscKeydown);
 };
 
 const closePhotoModal = () => {
   closePopup();
   document.removeEventListener('keydown', onModalEscKeydown);
-  openModalButton.value = null;
-  formModal.reset();
 };
 
 const stopEscEvent = (evt) => {
