@@ -5,4 +5,3 @@ import { openPost } from './utils/open-full-picture.js';
 const postsArray = createPosts(15);
 createMinPictures(postsArray);
 openPost(postsArray);
-

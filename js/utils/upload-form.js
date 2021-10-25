@@ -44,6 +44,7 @@ const stopEscEvent = (evt) => {
 const testHashtagsArrayOnReg = (hashtagsArray) => {
   for (let i = 0; i < hashtagsArray.length; i++) {
     if (!hashtagsRegexp.test(hashtagsArray[i])) {
+
       return false;
     }
   }
