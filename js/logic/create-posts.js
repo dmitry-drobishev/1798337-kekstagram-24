@@ -1,4 +1,4 @@
-import { getRandomPositiveInteger } from './get-random-positive-integer.js';
+import { getRandomPositiveInteger } from '../utils/get-random-positive-integer.js';
 
 // Функции для создания массива из 25 сгенерированных объектов.
 const NAMES = [
@@ -82,7 +82,7 @@ const createComments = (postId, commentsValue = 1) => {
 
 const createPost = (postId) => ({
   id: postId,
-  url: `photos/${postId}.jpg`,
+  url: `photos/${postId + 1}.jpg`,
   description: DESCRIPTIONS[getRandomPositiveInteger(0, DESCRIPTIONS.length - 1)],
   like: getRandomPositiveInteger(MIN_LIKES_VALUE, MAX_LIKES_VALUE),
   comments: createComments(postId, 3),
@@ -90,7 +90,7 @@ const createPost = (postId) => ({
 
 const createPosts = (postValue = POSTS_VALUE) => {
   const postArray = [];
-  for (let postId = 1; postId <= postValue; postId++) {
+  for (let postId = 0; postId < postValue; postId++) {
     postArray.push(createPost(postId));
   }
   return postArray;

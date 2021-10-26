@@ -1,4 +1,4 @@
-import { isEscKey } from './upload-form.js';
+import { isEscKey } from '../utils/helper.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const minPicture = document.querySelector('.pictures');
@@ -18,26 +18,21 @@ const onPostEscKeydown = (evt) => {
   }
 };
 
-const openFullPicture = () => {
-  bigPicture.classList.remove('hidden');
-  siteBody.classList.add('modal-open');
-  document.addEventListener('keydown', onPostEscKeydown);
-};
-
 const closeFullPicture = () => {
   closePost();
   document.removeEventListener('keydown', onPostEscKeydown);
 };
 
-const completionPost = (evt, postsArray) => {
-  const postId = evt.target.getAttribute('data-id') - 1;
+const openFullPicture = (evt, postsArray) => {
+  const postId = evt.target.getAttribute('data-id');
   const commentsElements = document.createDocumentFragment();
-  const comments = postsArray[postId].comments;
+  const post = postsArray[postId];
+  const comments = post.comments;
 
-  bigPicture.querySelector('.big-picture__img > img').src = postsArray[postId].url;
-  bigPicture.querySelector('.social__caption').textContent = postsArray[postId].description;
-  bigPicture.querySelector('.likes-count').textContent = postsArray[postId].like;
-  bigPicture.querySelector('.comments-count').textContent = postsArray[postId].comments.length;
+  bigPicture.querySelector('.big-picture__img > img').src = post.url;
+  bigPicture.querySelector('.social__caption').textContent = post.description;
+  bigPicture.querySelector('.likes-count').textContent = post.like;
+  bigPicture.querySelector('.comments-count').textContent = post.comments.length;
   bigPicture.querySelector('.social__comment-count').classList.add('hidden');
   bigPicture.querySelector('.comments-loader').classList.add('hidden');
 
@@ -50,13 +45,15 @@ const completionPost = (evt, postsArray) => {
   });
   commentsContainer.innerHTML = '';
   commentsContainer.appendChild(commentsElements);
+  bigPicture.classList.remove('hidden');
+  siteBody.classList.add('modal-open');
+  document.addEventListener('keydown', onPostEscKeydown);
 };
 
 const openPost = (postsArray) => {
   minPicture.addEventListener('click', (evt) => {
-    if (evt.target.closest('.picture') || evt.target.classList.contains('.picture')) {
-      openFullPicture();
-      completionPost(evt, postsArray);
+    if (evt.target.closest('.picture')) {
+      openFullPicture(evt, postsArray);
     }
   });
 

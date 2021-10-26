@@ -10,7 +10,6 @@ const createMinPictures = (postsArray) => {
     newMinPicture.querySelector('.picture__img').src = postData.url;
     newMinPicture.querySelector('.picture__likes').textContent = postData.like;
     newMinPicture.querySelector('.picture__comments').textContent = postData.comments.length;
-    // newMinPicture.dataset.id = postData.id;
     newMinPicture.querySelector('.picture__img').dataset.id = postData.id;
     minImagesListFragment.appendChild(newMinPicture);
   });
