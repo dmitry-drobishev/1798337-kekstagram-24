@@ -1,4 +1,3 @@
-import {createPosts} from './create-posts.js';
 const picture = document.querySelector('#picture').content;
 const patternPicture = picture.querySelector('.picture');
 const picturesContainer = document.querySelector('.pictures');
@@ -11,11 +10,10 @@ const createMinPictures = (postsArray) => {
     newMinPicture.querySelector('.picture__img').src = postData.url;
     newMinPicture.querySelector('.picture__likes').textContent = postData.like;
     newMinPicture.querySelector('.picture__comments').textContent = postData.comments.length;
+    newMinPicture.querySelector('.picture__img').dataset.id = postData.id;
     minImagesListFragment.appendChild(newMinPicture);
   });
   picturesContainer.appendChild(minImagesListFragment);
 };
-
-createMinPictures(createPosts(0));
 
 export {createMinPictures};

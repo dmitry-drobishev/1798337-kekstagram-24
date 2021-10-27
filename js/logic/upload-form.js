@@ -1,3 +1,4 @@
+import { isEscKey } from '../utils/helper.js';
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
 const siteBody = document.querySelector('body');
@@ -7,8 +8,6 @@ const userCommentInput = document.querySelector('.text__description');
 const hashtagsRegexp =  /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const userHashtagInput = document.querySelector('.text__hashtags');
 const MAX_HASHTAG_LENGTH = 5;
-
-const isEscKey = (evt) => evt.key === 'Escape';
 
 const closePopup = () => {
   photoModal.classList.add('hidden');
@@ -42,8 +41,9 @@ const stopEscEvent = (evt) => {
 };
 
 const testHashtagsArrayOnReg = (hashtagsArray) => {
-  for (let hashtagIndex = 0; hashtagIndex < hashtagsArray.length; hashtagIndex++) {
-    if (!hashtagsRegexp.test(hashtagsArray[hashtagIndex])) {
+  for (let i = 0; i < hashtagsArray.length; i++) {
+    if (!hashtagsRegexp.test(hashtagsArray[i])) {
+
       return false;
     }
   }
@@ -93,4 +93,4 @@ const initUploadForm = () => {
   userHashtagInput.addEventListener('input', handleUserHashtagInput);
 };
 
-export { initUploadForm };
+export { initUploadForm, isEscKey };

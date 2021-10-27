@@ -1,6 +1,7 @@
-import { createPosts } from './utils/create-posts.js';
-import { createMinPictures } from './utils/create-min-pictures.js';
-import { initUploadForm } from './utils/upload-form.js';
+import { createPosts } from './logic/create-posts.js';
+import { createMinPictures } from './logic/create-min-pictures.js';
+import { openPost } from './logic/open-full-picture.js';
 
-createMinPictures(createPosts(15));
-initUploadForm ();
+const postsArray = createPosts(20);
+createMinPictures(postsArray);
+openPost(postsArray);
