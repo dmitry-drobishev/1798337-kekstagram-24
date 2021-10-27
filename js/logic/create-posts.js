@@ -85,7 +85,7 @@ const createPost = (postId) => ({
   url: `photos/${postId + 1}.jpg`,
   description: DESCRIPTIONS[getRandomPositiveInteger(0, DESCRIPTIONS.length - 1)],
   like: getRandomPositiveInteger(MIN_LIKES_VALUE, MAX_LIKES_VALUE),
-  comments: createComments(postId, 3),
+  comments: createComments(postId, 12),
 });
 
 const createPosts = (postValue = POSTS_VALUE) => {

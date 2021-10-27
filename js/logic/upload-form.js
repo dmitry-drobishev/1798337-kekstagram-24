@@ -93,4 +93,4 @@ const initUploadForm = () => {
   userHashtagInput.addEventListener('input', handleUserHashtagInput);
 };
 
-export { initUploadForm, isEscKey };
+export { initUploadForm };
