@@ -7,3 +7,5 @@ initUploadForm();
 const postsArray = createPosts(20);
 createMinPictures(postsArray);
 openPost(postsArray);
+
+export {postsArray};
