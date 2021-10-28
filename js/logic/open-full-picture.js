@@ -8,6 +8,8 @@ const commentPattern = bigPicture.querySelector('.social__comment');
 const commentsContainer = bigPicture.querySelector('.social__comments');
 const loadingCommentsButton = bigPicture.querySelector('.comments-loader');
 let commentsLoaded = bigPicture.querySelector('.comments-loaded');
+let lastCommentIndex = 0;
+const offsetComments = 5;
 
 const closePost = () => {
   bigPicture.classList.add('hidden');
@@ -25,7 +27,7 @@ const closeFullPicture = () => {
   document.removeEventListener('keydown', onPostEscKeydown);
 };
 
-const loadingComments = (startComment, offsetComments, commentsArray) => {
+const loadingComments = (startComment, commentsArray) => {
   const comments = commentsArray.slice(startComment, startComment + offsetComments);
   const commentsElements = document.createDocumentFragment();
   comments.forEach((comment) => {
@@ -35,6 +37,13 @@ const loadingComments = (startComment, offsetComments, commentsArray) => {
     newComment.querySelector('.social__text').textContent = comment.message;
     commentsElements.appendChild(newComment);
   });
+  lastCommentIndex = lastCommentIndex + commentsElements.childElementCount;
+  // console.log(commentsArray.length);
+  // console.log(lastCommentIndex);
+  if (lastCommentIndex >= commentsArray.length) {
+    loadingCommentsButton.classList.add('hidden');
+  }
+  commentsLoaded.textContent = lastCommentIndex;
   return commentsElements;
 };
 
@@ -42,19 +51,15 @@ const openFullPicture = (evt, postsArray) => {
   const postId = evt.target.getAttribute('data-id');
   const post = postsArray[postId];
   const comments = post.comments;
-  let lastCommentIndex = 0;
-  const offsetComments = 5;
+
 
   bigPicture.querySelector('.big-picture__img > img').src = post.url;
   bigPicture.querySelector('.social__caption').textContent = post.description;
   bigPicture.querySelector('.likes-count').textContent = post.like;
   bigPicture.querySelector('.comments-count').textContent = post.comments.length;
 
-  let commentsElements = loadingComments(lastCommentIndex, offsetComments, comments);
-  lastCommentIndex = lastCommentIndex + commentsElements.childElementCount;
-  if (lastCommentIndex >= comments.length) {
-    loadingCommentsButton.classList.add('.hidden');
-  }
+  let commentsElements = loadingComments(lastCommentIndex, comments);
+
   commentsLoaded.textContent = lastCommentIndex;
   commentsContainer.innerHTML = '';
   commentsContainer.appendChild(commentsElements);
@@ -63,13 +68,8 @@ const openFullPicture = (evt, postsArray) => {
   document.addEventListener('keydown', onPostEscKeydown);
 
   loadingCommentsButton.addEventListener('click', () => {
-    commentsElements = loadingComments(lastCommentIndex, offsetComments, comments);
-    lastCommentIndex = lastCommentIndex + commentsElements.childElementCount;
-    if (lastCommentIndex >= comments.length) {
-      loadingCommentsButton.classList.add('hidden');
-    }
+    commentsElements = loadingComments(lastCommentIndex, comments);
     commentsContainer.appendChild(commentsElements);
-    commentsLoaded.textContent = lastCommentIndex;
   });
 };
 
