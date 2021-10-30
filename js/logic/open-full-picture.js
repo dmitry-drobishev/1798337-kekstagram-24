@@ -6,15 +6,15 @@ const closeFullPictureButton = document.querySelector('.big-picture__cancel'); /
 const siteBody = document.querySelector('body');
 const commentPattern = fullPicturePopup.querySelector('.social__comment'); // шаблон комментария
 const commentsContainer = fullPicturePopup.querySelector('.social__comments'); // div с комментариями
-const loadingCommentsButton = fullPicturePopup.querySelector('.comments-loader'); // кнопка «Загрузить ещё»
+const createCommentsButton = fullPicturePopup.querySelector('.comments-loader'); // кнопка «Загрузить ещё»
 const commentsLoaded = fullPicturePopup.querySelector('.comments-loaded'); // счетчик заказанных комментариев
 let lastCommentIndex = 0; // индекс последнего показанного комментрия
-const offsetComments = 5; // сколько комментариев загружать за раз
+const COMMENTS_OFFSET = 5; // сколько комментариев загружать за раз
 let currentPostCommentsArray = []; // комментарии к выбранному посту
 
 // Функция загружает 5 комментариев в фрагмент
-const loadingComments = (commentsArray) => {
-  const comments = commentsArray.slice(lastCommentIndex, lastCommentIndex + offsetComments);
+const createComments = (commentsArray) => {
+  const comments = commentsArray.slice(lastCommentIndex, lastCommentIndex + COMMENTS_OFFSET);
   const commentsFragment = document.createDocumentFragment();
 
   comments.forEach((comment) => {
@@ -28,15 +28,15 @@ const loadingComments = (commentsArray) => {
   lastCommentIndex = lastCommentIndex + commentsFragment.childElementCount;
 
   if (lastCommentIndex >= commentsArray.length) {
-    loadingCommentsButton.classList.add('hidden');
+    createCommentsButton.classList.add('hidden');
   }
   commentsLoaded.textContent = lastCommentIndex;
   return commentsFragment;
 };
 
 // Функция добавляет фрагмент комментариев в пост
-const addingCommentsToPost = () => {
-  commentsContainer.appendChild(loadingComments(currentPostCommentsArray));
+const addCommentsToPost = () => {
+  commentsContainer.appendChild(createComments(currentPostCommentsArray));
 };
 
 // Функция открывает пост
@@ -53,18 +53,18 @@ const openFullPicture = (evt, postsArray) => {
 
   commentsLoaded.textContent = lastCommentIndex;
   commentsContainer.innerHTML = '';
-  addingCommentsToPost(currentPostCommentsArray);
+  addCommentsToPost(currentPostCommentsArray);
   fullPicturePopup.classList.remove('hidden');
   siteBody.classList.add('modal-open');
-  loadingCommentsButton.addEventListener('click', addingCommentsToPost);
+  createCommentsButton.addEventListener('click', addCommentsToPost);
 };
 
 // Функция закрывает окно поста
 const closePost = () => {
   fullPicturePopup.classList.add('hidden');
   siteBody.classList.remove('modal-open');
-  loadingCommentsButton.classList.remove('hidden');
-  loadingCommentsButton.removeEventListener('click', addingCommentsToPost);
+  createCommentsButton.classList.remove('hidden');
+  createCommentsButton.removeEventListener('click', addCommentsToPost);
 };
 
 // Функция закрытия окно при нажатии esc
@@ -81,7 +81,7 @@ const closeFullPicture = () => {
   document.removeEventListener('keydown', onPostEscKeydown);
 };
 
-const initPostsPrewviews = (postsArray) => {
+const initPostsPreviews = (postsArray) => {
   minPictureContainer.addEventListener('click', (evt) => {
     if (evt.target.closest('.picture')) {
       openFullPicture(evt, postsArray);
@@ -92,4 +92,4 @@ const initPostsPrewviews = (postsArray) => {
   closeFullPictureButton.addEventListener('click', closeFullPicture);
 };
 
-export { initPostsPrewviews };
+export { initPostsPreviews };
