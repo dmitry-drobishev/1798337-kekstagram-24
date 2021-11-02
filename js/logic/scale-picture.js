@@ -7,7 +7,6 @@ const SCALE_STEP = 25;
 const MAX_SCALE = 100;
 const MIN_SCALE = 25;
 
-
 const scaleUploadPicture = () => {
   scaleUpButton.addEventListener('click', () => {
 
@@ -30,4 +29,4 @@ const scaleUploadPicture = () => {
   });
 };
 
-export { scaleUploadPicture };
+export { scaleUploadPicture};
