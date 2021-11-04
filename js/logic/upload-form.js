@@ -1,4 +1,6 @@
 import { isEscKey } from '../utils/helper.js';
+import { initSlider, closeSliderEvents } from './slider.js';
+import { initUploadPicture, closeScalePictureEvents } from './scale-picture.js';
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
 const siteBody = document.querySelector('body');
@@ -14,6 +16,8 @@ const closePopup = () => {
   siteBody.classList.remove('.modal-open');
   openModalButton.value = null;
   formModal.reset();
+  closeSliderEvents();
+  closeScalePictureEvents();
 };
 
 const onModalEscKeydown = (evt) => {
@@ -27,6 +31,8 @@ const openPhotoModal = () => {
   photoModal.classList.remove('hidden');
   siteBody.classList.add('.modal-open');
   document.addEventListener('keydown', onModalEscKeydown);
+  initSlider();
+  initUploadPicture();
 };
 
 const closePhotoModal = () => {
