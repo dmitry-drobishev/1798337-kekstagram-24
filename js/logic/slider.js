@@ -13,7 +13,7 @@ const SLIDER_OPTIONS = {
   none: {},
 };
 
-const getEffect = () => {
+const getEffect = (effect) => {
   const SLIDER_STYLE_FILTERS = {
     chrome: `grayscale(${effectLevel.value})`,
     sepia: `sepia(${effectLevel.value})`,
@@ -22,31 +22,15 @@ const getEffect = () => {
     heat: `brightness(${effectLevel.value})`,
     none: 'none',
   };
-  return SLIDER_STYLE_FILTERS;
-};
-
-const handleEffectClick = (evt) => {
-  uploadPicture.className = '';
-  const eventOnRadioButton = evt.target.closest('.effects__radio');
-  if (eventOnRadioButton) {
-    currentEffect = eventOnRadioButton.value;
-    uploadPicture.classList.add(`effects__preview--${currentEffect}`);
-  }
+  return SLIDER_STYLE_FILTERS[effect];
 };
 
 const handleEffectChange = (evt) => {
   if (!evt.target.checked) { return; }
+  uploadPicture.className = '';
+  currentEffect = evt.target.value;
+  uploadPicture.classList.add(`effects__preview--${currentEffect}`);
   slider.noUiSlider.updateOptions(SLIDER_OPTIONS[currentEffect]);
-  slider.noUiSlider.on('update', (values, handle) => {
-    effectLevel.value = values[handle];
-    const SLIDER_STYLE_FILTERS = getEffect();
-    document.querySelector(`.effects__preview--${currentEffect}`).style.filter = SLIDER_STYLE_FILTERS[currentEffect];
-    if (currentEffect === 'none') {
-      slider.style.display = 'none';
-    } else {
-      slider.style.display = 'block';
-    }
-  });
 };
 
 const initSlider = () => {
@@ -70,17 +54,26 @@ const initSlider = () => {
       },
     },
   });
+
+  slider.noUiSlider.on('update', (values, handle) => {
+    effectLevel.value = values[handle];
+    document.querySelector(`.effects__preview--${currentEffect}`).style.filter = getEffect(currentEffect);
+    if (currentEffect === 'none') {
+      slider.style.display = 'none';
+    } else {
+      slider.style.display = 'block';
+    }
+  });
+
   slider.style.display = 'none';
-  effectsList.addEventListener('click', handleEffectClick);
   effectsList.addEventListener('change', handleEffectChange);
 };
 
-const closeSliderEvents = () => {
+const handleRemoveSlider = () => {
   slider.noUiSlider.destroy();
   uploadPicture.className = '';
   uploadPicture.style = '';
-  effectsList.removeEventListener('click', handleEffectClick);
   effectsList.removeEventListener('change', handleEffectChange);
 };
 
-export { initSlider, closeSliderEvents };
+export { initSlider, handleRemoveSlider };

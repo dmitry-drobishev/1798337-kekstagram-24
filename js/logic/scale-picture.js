@@ -1,6 +1,6 @@
 const imgUploadPopup = document.querySelector('.img-upload'); // попап с загрузкой нового изображения
-const handleScaleUp = imgUploadPopup.querySelector('.scale__control--bigger');
-const handleScaleDown = imgUploadPopup.querySelector('.scale__control--smaller');
+const scaleUpButton = imgUploadPopup.querySelector('.scale__control--bigger');
+const scaleDownButton = imgUploadPopup.querySelector('.scale__control--smaller');
 const scaleControlCounter = imgUploadPopup.querySelector('.scale__control--value');
 const uploadPicture = imgUploadPopup.querySelector('.img-upload__preview img');
 const SCALE_STEP = 25;
@@ -25,15 +25,15 @@ const scaleDown = () => {
   uploadPicture.style.transform = `scale(${scaleNewValue}%)`;
 };
 
-const initUploadPicture = () => {
-  handleScaleUp.addEventListener('click', scaleUp);
-  handleScaleDown.addEventListener('click', scaleDown);
+const initScalePicture = () => {
+  scaleUpButton.addEventListener('click', scaleUp);
+  scaleDownButton.addEventListener('click', scaleDown);
 };
 
-const closeScalePictureEvents = () => {
+const removeScalePicture = () => {
   uploadPicture.style.transform = 'scale(100%)';
-  handleScaleUp.removeEventListener('click', scaleUp);
-  handleScaleDown.removeEventListener('click', scaleDown);
+  scaleUpButton.removeEventListener('click', scaleUp);
+  scaleDownButton.removeEventListener('click', scaleDown);
 };
 
-export { initUploadPicture, closeScalePictureEvents };
+export { initScalePicture, removeScalePicture };
