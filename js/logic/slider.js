@@ -13,13 +13,13 @@ const SLIDER_OPTIONS = {
   none: {},
 };
 
-const getEffect = (effect) => {
+const getEffect = (effect, effectLevelValue) => {
   const SLIDER_STYLE_FILTERS = {
-    chrome: `grayscale(${effectLevel.value})`,
-    sepia: `sepia(${effectLevel.value})`,
-    marvin: `invert(${effectLevel.value}%)`,
-    phobos: `blur(${effectLevel.value}px)`,
-    heat: `brightness(${effectLevel.value})`,
+    chrome: `grayscale(${effectLevelValue})`,
+    sepia: `sepia(${effectLevelValue})`,
+    marvin: `invert(${effectLevelValue}%)`,
+    phobos: `blur(${effectLevelValue}px)`,
+    heat: `brightness(${effectLevelValue})`,
     none: 'none',
   };
   return SLIDER_STYLE_FILTERS[effect];
@@ -57,7 +57,7 @@ const initSlider = () => {
 
   slider.noUiSlider.on('update', (values, handle) => {
     effectLevel.value = values[handle];
-    document.querySelector(`.effects__preview--${currentEffect}`).style.filter = getEffect(currentEffect);
+    document.querySelector(`.effects__preview--${currentEffect}`).style.filter = getEffect(currentEffect, effectLevel.value);
     if (currentEffect === 'none') {
       slider.style.display = 'none';
     } else {
