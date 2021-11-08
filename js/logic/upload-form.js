@@ -99,4 +99,4 @@ const initUploadForm = () => {
   userHashtagInput.addEventListener('input', handleUserHashtagInput);
 };
 
-export { initUploadForm };
+export { initUploadForm};
