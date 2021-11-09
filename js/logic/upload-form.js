@@ -1,6 +1,8 @@
 import { isEscKey } from '../utils/helper.js';
 import { initSlider, handleRemoveSlider } from './slider.js';
 import { initScalePicture, removeScalePicture } from './scale-picture.js';
+import { sendData } from './api.js';
+import { showAlert } from '../utils/helper.js';
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
 const siteBody = document.querySelector('body');
@@ -83,6 +85,18 @@ const handleUserHashtagInput = () => {
   userHashtagInput.reportValidity();
 };
 
+const setUserFormSubmit = (onSuccess) => {
+  formModal.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+      new FormData(evt.target),
+    );
+  });
+};
+
 const initUploadForm = () => {
   openModalButton.addEventListener('change', openPhotoModal);
 
@@ -98,5 +112,7 @@ const initUploadForm = () => {
 
   userHashtagInput.addEventListener('input', handleUserHashtagInput);
 };
+
+setUserFormSubmit(closePhotoModal);
 
 export { initUploadForm};
