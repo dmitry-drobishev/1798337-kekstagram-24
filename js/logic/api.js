@@ -1,22 +1,18 @@
+// import { addSuccessPopup } from "./upload-form";
+
 const getData = (onSuccessPicture, onSuccessPreviews, onFail) => {
   fetch('https://24.javascript.pages.academy/kekstagram/data')
-    .then((response) => {
-      if (response.ok) {
-        response.json();
-      } else {
-        onFail('Не удалось загрузить данные. Сервер недоступен');
-      }
-    })
+    .then((response) => response.json())
     .then((postsArray) => {
       onSuccessPicture(postsArray);
       onSuccessPreviews(postsArray);
     })
     .catch(() => {
-      onFail('Не удалось загрузить данные');
+      onFail('Не удалось загрузить данные. Попробуйте ещё раз');
     });
 };
 
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (onSuccess, successPopap, onFail, body) => {
   fetch(
     'https://24.javascript.pages.academy/kekstagram',
     {
@@ -27,6 +23,7 @@ const sendData = (onSuccess, onFail, body) => {
     .then((response) => {
       if (response.ok) {
         onSuccess();
+        successPopap();
       } else {
         onFail('Не удалось отправить форму. Попробуйте ещё раз');
       }

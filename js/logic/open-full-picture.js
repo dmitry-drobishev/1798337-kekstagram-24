@@ -48,7 +48,7 @@ const openFullPicture = (evt, postsArray) => {
 
   fullPicturePopup.querySelector('.big-picture__img > img').src = post.url;
   fullPicturePopup.querySelector('.social__caption').textContent = post.description;
-  fullPicturePopup.querySelector('.likes-count').textContent = post.like;
+  fullPicturePopup.querySelector('.likes-count').textContent = post.likes;
   fullPicturePopup.querySelector('.comments-count').textContent = post.comments.length;
 
   commentsLoaded.textContent = lastCommentIndex;

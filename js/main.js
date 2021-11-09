@@ -8,5 +8,4 @@ import { showAlert } from './utils/helper.js';
 // const postsArray = createPosts(20);
 
 initUploadForm();
-
 getData(createMinPictures, initPostsPreviews, showAlert);

@@ -85,18 +85,57 @@ const handleUserHashtagInput = () => {
   userHashtagInput.reportValidity();
 };
 
+// Функция показывает/убирает сообщение об успешной загрузке изображения
+const closeSuccessPopup = () => {
+  const successPopup = document.querySelector('.success');
+  successPopup.parentNode.removeChild(successPopup);
+};
+
+const onSuccessPopupEscKeydown = (evt) => {
+  if (isEscKey(evt)) {
+    closeSuccessPopup();
+    document.removeEventListener('keydown', onSuccessPopupEscKeydown);
+  }
+};
+
+const withoutSuccessPopupEvt = (evt) => {
+  if (!evt.target.closest('success')) {
+    closeSuccessPopup();
+    siteBody.removeaddEventListener('click', withoutSuccessPopupEvt);
+  }
+};
+
+const addSuccessPopup = () => {
+  const successTemplate = document.querySelector('#success').content;
+  const successPattern = successTemplate.querySelector('.success');
+
+  const newSuccess = successPattern.cloneNode(true);
+  siteBody.appendChild(newSuccess);
+
+  const successCloseButton = document.querySelector('.success__button');
+
+  successCloseButton.addEventListener('click', closeSuccessPopup);
+
+  siteBody.addEventListener('click', withoutSuccessPopupEvt);
+
+  document.addEventListener('keydown', onSuccessPopupEscKeydown);
+};
+
+// Функция отправки формы
 const setUserFormSubmit = (onSuccess) => {
   formModal.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     sendData(
       () => onSuccess(),
+      () => addSuccessPopup(),
       () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
       new FormData(evt.target),
     );
   });
 };
 
+// Функция работы с формой загрузки изображения
 const initUploadForm = () => {
   openModalButton.addEventListener('change', openPhotoModal);
 
@@ -115,4 +154,4 @@ const initUploadForm = () => {
 
 setUserFormSubmit(closePhotoModal);
 
-export { initUploadForm};
+export { initUploadForm, addSuccessPopup};

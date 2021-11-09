@@ -696,6 +696,14 @@ main {
   border-radius: 5px;
 }
 
+.text__hashtags:invalid {
+  border: 5px solid red;
+}
+
+.text__hashtags:not([value = ""]):not(:focus):invalid {
+  border: none;
+}
+
 .text__description {
   width: 450px;
   height: 100px;
