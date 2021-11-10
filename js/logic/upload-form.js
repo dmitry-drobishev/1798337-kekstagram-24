@@ -84,7 +84,7 @@ const handleUserHashtagInput = () => {
   userHashtagInput.reportValidity();
 };
 
-// Функция показывает/убирает сообщение об успешной загрузке изображения
+// Функция убирает сообщение об успешной загрузке изображения
 const closeSuccessPopup = () => {
   const successPopup = document.querySelector('.success');
   successPopup.remove();
@@ -108,6 +108,7 @@ function onOuterSuccessPopupClick (evt) {
   }
 }
 
+// Функция показывает сообщение об успешной загрузке изображения
 const showSuccessPopup = () => {
   const successTemplate = document.querySelector('#success').content;
   const successPattern = successTemplate.querySelector('.success');
@@ -122,7 +123,7 @@ const showSuccessPopup = () => {
   siteBody.appendChild(successPopup);
 };
 
-// Функция показывает/убирает сообщение об ошибке при загрузке изображения
+// Функция убирает сообщение об ошибке при загрузке изображения
 const closeFailPopup = () => {
   document.querySelector('.error').remove();
   document.removeEventListener('keydown', onFailPopupEscKeydown);
@@ -145,6 +146,7 @@ function onOuterFailPopupClick (evt) {
   }
 }
 
+// Функция показывает сообщение об ошибке при загрузке изображения
 const showFailPopup = () => {
   const failTemplate = document.querySelector('#error').content;
   const failPattern = failTemplate.querySelector('.error');
@@ -165,11 +167,11 @@ const setUserFormSubmit = () => {
     evt.preventDefault();
 
     sendData(
-      closePhotoModal,
       showSuccessPopup,
       showFailPopup,
       new FormData(evt.target),
     );
+    closePhotoModal();
   });
 };
 

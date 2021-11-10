@@ -1,10 +1,9 @@
 //  Функция получает массив объектов с сервера reateMinPictures, initPostsPreview
-const getData = (createPictures, initPreview, onFail) => {
+const getData = (onSuccess, onFail) => {
   fetch('https://24.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
     .then((postsArray) => {
-      createPictures(postsArray);
-      initPreview(postsArray);
+      onSuccess(postsArray);
     })
     .catch(() => {
       onFail('Не удалось загрузить данные c сервера.');
@@ -12,7 +11,7 @@ const getData = (createPictures, initPreview, onFail) => {
 };
 
 // Функция отправляет данные из формы на сервер
-const sendData = (closeForm, successPopup, failPopup, body) => {
+const sendData = (onSuccess, onFail, body) => {
   fetch(
     'https://24.javascript.pages.academy/kekstagram',
     {
@@ -21,15 +20,14 @@ const sendData = (closeForm, successPopup, failPopup, body) => {
     },
   )
     .then((response) => {
-      closeForm();
       if (response.ok) {
-        successPopup();
+        onSuccess();
       } else {
-        failPopup();
+        onFail();
       }
     })
     .catch(() => {
-      failPopup();
+      onFail();
     });
 };
 
