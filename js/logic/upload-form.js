@@ -2,7 +2,6 @@ import { isEscKey } from '../utils/helper.js';
 import { initSlider, handleRemoveSlider } from './slider.js';
 import { initScalePicture, removeScalePicture } from './scale-picture.js';
 import { sendData } from './api.js';
-// import { showAlert } from '../utils/helper.js';
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
 const siteBody = document.querySelector('body');
