@@ -697,11 +697,7 @@ main {
 }
 
 .text__hashtags:invalid {
-  border: 5px solid red;
-}
-
-.text__hashtags:not([value = ""]):not(:focus):invalid {
-  border: none;
+  outline-color:  red;
 }
 
 .text__description {

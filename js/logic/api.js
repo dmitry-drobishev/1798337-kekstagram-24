@@ -1,18 +1,18 @@
-// import { addSuccessPopup } from "./upload-form";
-
-const getData = (onSuccessPicture, onSuccessPreviews, onFail) => {
+//  Функция получает массив объектов с сервера reateMinPictures, initPostsPreview
+const getData = (createPictures, initPreview, onFail) => {
   fetch('https://24.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
     .then((postsArray) => {
-      onSuccessPicture(postsArray);
-      onSuccessPreviews(postsArray);
+      createPictures(postsArray);
+      initPreview(postsArray);
     })
     .catch(() => {
-      onFail('Не удалось загрузить данные. Попробуйте ещё раз');
+      onFail('Не удалось загрузить данные c сервера.');
     });
 };
 
-const sendData = (onSuccess, successPopap, onFail, body) => {
+// Функция отправляет данные из формы на сервер
+const sendData = (closeForm, successPopup, failPopup, body) => {
   fetch(
     'https://24.javascript.pages.academy/kekstagram',
     {
@@ -21,15 +21,15 @@ const sendData = (onSuccess, successPopap, onFail, body) => {
     },
   )
     .then((response) => {
+      closeForm();
       if (response.ok) {
-        onSuccess();
-        successPopap();
+        successPopup();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        failPopup();
       }
     })
     .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      failPopup();
     });
 };
 

@@ -2,7 +2,7 @@ import { isEscKey } from '../utils/helper.js';
 import { initSlider, handleRemoveSlider } from './slider.js';
 import { initScalePicture, removeScalePicture } from './scale-picture.js';
 import { sendData } from './api.js';
-import { showAlert } from '../utils/helper.js';
+// import { showAlert } from '../utils/helper.js';
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
 const siteBody = document.querySelector('body');
@@ -68,7 +68,7 @@ const testHashtagsArrayOnUnique = (hashtagsArray) => {
 
 const handleUserHashtagInput = () => {
   const hashtagsArray = userHashtagInput.value.split(' ');
-  if (!testHashtagsArrayOnReg(hashtagsArray)) {
+  if (!testHashtagsArrayOnReg(hashtagsArray) && userHashtagInput.value !== '') {
     userHashtagInput.setCustomValidity(`- хэш-тег начинается с символа # (решётка);
     - строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;
     - хеш-тег не может состоять только из одной решётки;
@@ -88,54 +88,93 @@ const handleUserHashtagInput = () => {
 // Функция показывает/убирает сообщение об успешной загрузке изображения
 const closeSuccessPopup = () => {
   const successPopup = document.querySelector('.success');
-  successPopup.parentNode.removeChild(successPopup);
+  successPopup.remove();
+  document.removeEventListener('keydown', onSuccessPopupEscKeydown);
+  document.removeEventListener('click', onOuterSuccessPopupClick);
 };
 
-const onSuccessPopupEscKeydown = (evt) => {
+function onSuccessPopupButtonClick () {
+  closeSuccessPopup();
+}
+
+function onSuccessPopupEscKeydown (evt) {
   if (isEscKey(evt)) {
     closeSuccessPopup();
-    document.removeEventListener('keydown', onSuccessPopupEscKeydown);
   }
-};
+}
 
-const withoutSuccessPopupEvt = (evt) => {
-  if (!evt.target.closest('success')) {
+function onOuterSuccessPopupClick (evt) {
+  if (!evt.target.closest('.success__inner')) {
     closeSuccessPopup();
-    siteBody.removeaddEventListener('click', withoutSuccessPopupEvt);
   }
-};
+}
 
-const addSuccessPopup = () => {
+const showSuccessPopup = () => {
   const successTemplate = document.querySelector('#success').content;
   const successPattern = successTemplate.querySelector('.success');
+  const successPopup = successPattern.cloneNode(true);
 
-  const newSuccess = successPattern.cloneNode(true);
-  siteBody.appendChild(newSuccess);
+  successPopup.querySelector('.success__button').addEventListener('click', onSuccessPopupButtonClick);
 
-  const successCloseButton = document.querySelector('.success__button');
-
-  successCloseButton.addEventListener('click', closeSuccessPopup);
-
-  siteBody.addEventListener('click', withoutSuccessPopupEvt);
+  document.addEventListener('click', onOuterSuccessPopupClick);
 
   document.addEventListener('keydown', onSuccessPopupEscKeydown);
+
+  siteBody.appendChild(successPopup);
+};
+
+// Функция показывает/убирает сообщение об ошибке при загрузке изображения
+const closeFailPopup = () => {
+  document.querySelector('.error').remove();
+  document.removeEventListener('keydown', onFailPopupEscKeydown);
+  document.removeEventListener('click', onOuterFailPopupClick);
+};
+
+function onFailPopupButtonClick () {
+  closeFailPopup();
+}
+
+function onFailPopupEscKeydown (evt) {
+  if (isEscKey(evt)) {
+    closeFailPopup();
+  }
+}
+
+function onOuterFailPopupClick (evt) {
+  if (!evt.target.closest('.error__inner')) {
+    closeFailPopup();
+  }
+}
+
+const showFailPopup = () => {
+  const failTemplate = document.querySelector('#error').content;
+  const failPattern = failTemplate.querySelector('.error');
+  const failPopup = failPattern.cloneNode(true);
+
+  failPopup.querySelector('.error__button').addEventListener('click', onFailPopupButtonClick);
+
+  document.addEventListener('click', onOuterFailPopupClick);
+
+  document.addEventListener('keydown', onFailPopupEscKeydown);
+
+  siteBody.appendChild(failPopup);
 };
 
 // Функция отправки формы
-const setUserFormSubmit = (onSuccess) => {
+const setUserFormSubmit = () => {
   formModal.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     sendData(
-      () => onSuccess(),
-      () => addSuccessPopup(),
-      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+      closePhotoModal,
+      showSuccessPopup,
+      showFailPopup,
       new FormData(evt.target),
     );
   });
 };
 
-// Функция работы с формой загрузки изображения
+// Функция для работы с формой загрузки изображения
 const initUploadForm = () => {
   openModalButton.addEventListener('change', openPhotoModal);
 
@@ -150,8 +189,8 @@ const initUploadForm = () => {
   });
 
   userHashtagInput.addEventListener('input', handleUserHashtagInput);
+
+  setUserFormSubmit();
 };
 
-setUserFormSubmit(closePhotoModal);
-
-export { initUploadForm, addSuccessPopup};
+export { initUploadForm };
