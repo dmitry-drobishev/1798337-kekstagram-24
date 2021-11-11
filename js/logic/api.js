@@ -1,4 +1,4 @@
-//  Функция получает массив объектов с сервера reateMinPictures, initPostsPreview
+//  Функция получает массив объектов с сервера
 const getData = (onSuccess, onFail) => {
   fetch('https://24.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
@@ -11,7 +11,7 @@ const getData = (onSuccess, onFail) => {
 };
 
 // Функция отправляет данные из формы на сервер
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (body, onSuccess, onFail) => {
   fetch(
     'https://24.javascript.pages.academy/kekstagram',
     {

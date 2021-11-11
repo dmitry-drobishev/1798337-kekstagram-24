@@ -4,10 +4,10 @@ import { initUploadForm } from './logic/upload-form.js';
 import { getData } from './logic/api.js';
 import { showAlert } from './logic/show-alert.js';
 
-const showContent = (postsArray) => {
+const initContent = (postsArray) => {
   createMinPictures(postsArray);
   initPostsPreviews(postsArray);
 };
 
 initUploadForm();
-getData(showContent, showAlert);
+getData(initContent, showAlert);

@@ -167,9 +167,9 @@ const setUserFormSubmit = () => {
     evt.preventDefault();
 
     sendData(
+      new FormData(evt.target),
       showSuccessPopup,
       showFailPopup,
-      new FormData(evt.target),
     );
     closePhotoModal();
   });
