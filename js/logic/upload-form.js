@@ -1,6 +1,7 @@
 import { isEscKey } from '../utils/helper.js';
 import { initSlider, handleRemoveSlider } from './slider.js';
 import { initScalePicture, removeScalePicture } from './scale-picture.js';
+import { sendData } from './api.js';
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
 const siteBody = document.querySelector('body');
@@ -66,7 +67,7 @@ const testHashtagsArrayOnUnique = (hashtagsArray) => {
 
 const handleUserHashtagInput = () => {
   const hashtagsArray = userHashtagInput.value.split(' ');
-  if (!testHashtagsArrayOnReg(hashtagsArray)) {
+  if (!testHashtagsArrayOnReg(hashtagsArray) && userHashtagInput.value !== '') {
     userHashtagInput.setCustomValidity(`- хэш-тег начинается с символа # (решётка);
     - строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;
     - хеш-тег не может состоять только из одной решётки;
@@ -83,6 +84,98 @@ const handleUserHashtagInput = () => {
   userHashtagInput.reportValidity();
 };
 
+// Функция убирает сообщение об успешной загрузке изображения
+const closeSuccessPopup = () => {
+  const successPopup = document.querySelector('.success');
+  successPopup.remove();
+  document.removeEventListener('keydown', onSuccessPopupEscKeydown);
+  document.removeEventListener('click', onOuterSuccessPopupClick);
+};
+
+function onSuccessPopupButtonClick () {
+  closeSuccessPopup();
+}
+
+function onSuccessPopupEscKeydown (evt) {
+  if (isEscKey(evt)) {
+    closeSuccessPopup();
+  }
+}
+
+function onOuterSuccessPopupClick (evt) {
+  if (!evt.target.closest('.success__inner')) {
+    closeSuccessPopup();
+  }
+}
+
+// Функция показывает сообщение об успешной загрузке изображения
+const showSuccessPopup = () => {
+  const successTemplate = document.querySelector('#success').content;
+  const successPattern = successTemplate.querySelector('.success');
+  const successPopup = successPattern.cloneNode(true);
+
+  successPopup.querySelector('.success__button').addEventListener('click', onSuccessPopupButtonClick);
+
+  document.addEventListener('click', onOuterSuccessPopupClick);
+
+  document.addEventListener('keydown', onSuccessPopupEscKeydown);
+
+  siteBody.appendChild(successPopup);
+};
+
+// Функция убирает сообщение об ошибке при загрузке изображения
+const closeFailPopup = () => {
+  document.querySelector('.error').remove();
+  document.removeEventListener('keydown', onFailPopupEscKeydown);
+  document.removeEventListener('click', onOuterFailPopupClick);
+};
+
+function onFailPopupButtonClick () {
+  closeFailPopup();
+}
+
+function onFailPopupEscKeydown (evt) {
+  if (isEscKey(evt)) {
+    closeFailPopup();
+  }
+}
+
+function onOuterFailPopupClick (evt) {
+  if (!evt.target.closest('.error__inner')) {
+    closeFailPopup();
+  }
+}
+
+// Функция показывает сообщение об ошибке при загрузке изображения
+const showFailPopup = () => {
+  const failTemplate = document.querySelector('#error').content;
+  const failPattern = failTemplate.querySelector('.error');
+  const failPopup = failPattern.cloneNode(true);
+
+  failPopup.querySelector('.error__button').addEventListener('click', onFailPopupButtonClick);
+
+  document.addEventListener('click', onOuterFailPopupClick);
+
+  document.addEventListener('keydown', onFailPopupEscKeydown);
+
+  siteBody.appendChild(failPopup);
+};
+
+// Функция отправки формы
+const setUserFormSubmit = () => {
+  formModal.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      new FormData(evt.target),
+      showSuccessPopup,
+      showFailPopup,
+    );
+    closePhotoModal();
+  });
+};
+
+// Функция для работы с формой загрузки изображения
 const initUploadForm = () => {
   openModalButton.addEventListener('change', openPhotoModal);
 
@@ -97,6 +190,8 @@ const initUploadForm = () => {
   });
 
   userHashtagInput.addEventListener('input', handleUserHashtagInput);
+
+  setUserFormSubmit();
 };
 
 export { initUploadForm };

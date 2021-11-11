@@ -696,6 +696,10 @@ main {
   border-radius: 5px;
 }
 
+.text__hashtags:invalid {
+  outline-color:  red;
+}
+
 .text__description {
   width: 450px;
   height: 100px;

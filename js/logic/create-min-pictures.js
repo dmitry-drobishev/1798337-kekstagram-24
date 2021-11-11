@@ -8,7 +8,7 @@ const createMinPictures = (postsArray) => {
   postsArray.forEach((postData) => {
     const newMinPicture = patternPicture.cloneNode(true);
     newMinPicture.querySelector('.picture__img').src = postData.url;
-    newMinPicture.querySelector('.picture__likes').textContent = postData.like;
+    newMinPicture.querySelector('.picture__likes').textContent = postData.likes;
     newMinPicture.querySelector('.picture__comments').textContent = postData.comments.length;
     newMinPicture.querySelector('.picture__img').dataset.id = postData.id;
     minImagesListFragment.appendChild(newMinPicture);
