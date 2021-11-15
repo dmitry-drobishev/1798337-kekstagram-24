@@ -1,5 +1,5 @@
 import { createMinPictures } from './create-min-pictures.js';
-import { shuffleArray } from '../utils/helper.js';
+import { shuffleArray } from '../utils/helpers.js';
 import { debounce } from '../utils/debounce.js';
 const minPicturesFilter = document.querySelector('.img-filters');
 
