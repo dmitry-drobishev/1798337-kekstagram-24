@@ -1,4 +1,4 @@
-import { isEscKey } from '../utils/helper.js';
+import { isEscKey } from '../utils/helpers.js';
 import { initSlider, handleRemoveSlider } from './slider.js';
 import { initScalePicture, removeScalePicture } from './scale-picture.js';
 import { sendData } from './api.js';

@@ -59,13 +59,13 @@ const initSlider = () => {
     effectLevel.value = values[handle];
     document.querySelector(`.effects__preview--${currentEffect}`).style.filter = getEffect(currentEffect, effectLevel.value);
     if (currentEffect === 'none') {
-      slider.style.display = 'none';
+      slider.classList.add('hidden');
     } else {
-      slider.style.display = 'block';
+      slider.classList.remove('hidden');
     }
   });
 
-  slider.style.display = 'none';
+  slider.classList.add('hidden');
   effectsList.addEventListener('change', handleEffectChange);
 };
 

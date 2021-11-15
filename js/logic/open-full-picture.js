@@ -1,4 +1,4 @@
-import { isEscKey } from '../utils/helper.js';
+import { isEscKey } from '../utils/helpers.js';
 
 const fullPicturePopup = document.querySelector('.big-picture'); // окна полноразмерного просмотра
 const minPictureContainer = document.querySelector('.pictures'); // миниатюры
@@ -40,8 +40,7 @@ const addCommentsToPost = () => {
 };
 
 // Функция открывает пост
-const openFullPicture = (evt, postsArray) => {
-  const postId = evt.target.getAttribute('data-id');
+const openFullPicture = (postId, postsArray) => {
   const post = postsArray[postId];
   currentPostCommentsArray = post.comments;
   lastCommentIndex = 0;
@@ -83,8 +82,9 @@ const closeFullPicture = () => {
 
 const initPostsPreviews = (postsArray) => {
   minPictureContainer.addEventListener('click', (evt) => {
-    if (evt.target.closest('.picture')) {
-      openFullPicture(evt, postsArray);
+    if (evt.target.closest('.picture') && !evt.target.closest('.picture__info')) {
+      const postId = evt.target.getAttribute('data-id');
+      openFullPicture(postId, postsArray);
       document.addEventListener('keydown', onPostEscKeydown);
     }
   });
