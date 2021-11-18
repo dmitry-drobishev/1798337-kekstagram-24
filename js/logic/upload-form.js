@@ -58,7 +58,10 @@ const testHashtagsArrayOnReg = (hashtagsArray) => {
 };
 
 const testHashtagsArrayOnUnique = (hashtagsArray) => {
-  const uniqueHashtags = Array.from(new Set(hashtagsArray));
+  const newHashtagsArray = hashtagsArray.map((hashtag) => {
+    hashtag.toLowerCase();
+  });
+  const uniqueHashtags = Array.from(new Set(newHashtagsArray));
   if (hashtagsArray.length !== uniqueHashtags.length) {
     return false;
   }

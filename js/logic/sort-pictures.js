@@ -24,6 +24,27 @@ const comparePosts = (postA, postB) => postB.comments.length - postA.comments.le
 // Функция сортировки по популярности
 const sortByPopular = (array) => array.slice().sort(comparePosts);
 
+// Функция выполняет сортировку миниатюр выбранным способом
+const sortPictures = (filterName, array) => {
+  switch (filterName) {
+    case 'filter-default':
+      removeMinPictures();
+      createMinPictures(array);
+      break;
+    case 'filter-random':
+      removeMinPictures();
+      createMinPictures(getRandomPosts(array));
+      break;
+    case 'filter-discussed':
+      removeMinPictures();
+      createMinPictures(sortByPopular(array));
+      break;
+  }
+};
+
+// Функция убирает дребезг
+const onSortButtonClick = debounce(sortPictures);
+
 // Функция работы фильтра
 const sortMinPictures = (array) => {
   minPicturesFilter.addEventListener('click', (evt) => {
@@ -31,22 +52,7 @@ const sortMinPictures = (array) => {
       document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
       evt.target.classList.add('img-filters__button--active');
       const filterName = evt.target.id;
-      debounce(() => {
-        switch (filterName) {
-          case 'filter-default':
-            removeMinPictures();
-            createMinPictures(array);
-            break;
-          case 'filter-random':
-            removeMinPictures();
-            createMinPictures(getRandomPosts(array));
-            break;
-          case 'filter-discussed':
-            removeMinPictures();
-            createMinPictures(sortByPopular(array));
-            break;
-        }
-      })(filterName);
+      onSortButtonClick(filterName, array);
     }
   });
 };
