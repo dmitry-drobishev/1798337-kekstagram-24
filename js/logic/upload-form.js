@@ -47,9 +47,9 @@ const stopEscEvent = (evt) => {
   }
 };
 
-const testHashtagsArrayOnReg = (hashtagsArray) => {
-  for (let i = 0; i < hashtagsArray.length; i++) {
-    if (!hashtagsRegexp.test(hashtagsArray[i])) {
+const testHashtagsArrayOnReg = (hashtags) => {
+  for (let i = 0; i < hashtags.length; i++) {
+    if (!hashtagsRegexp.test(hashtags[i])) {
 
       return false;
     }
@@ -57,29 +57,27 @@ const testHashtagsArrayOnReg = (hashtagsArray) => {
   return true;
 };
 
-const testHashtagsArrayOnUnique = (hashtagsArray) => {
-  const newHashtagsArray = hashtagsArray.map((hashtag) => {
-    hashtag.toLowerCase();
-  });
-  const uniqueHashtags = Array.from(new Set(newHashtagsArray));
-  if (hashtagsArray.length !== uniqueHashtags.length) {
+const testHashtagsArrayOnUnique = (hashtags) => {
+  const newHashtags = hashtags.map((hashtag) => hashtag.toLowerCase());
+  const uniqueHashtags = Array.from(new Set(newHashtags));
+  if (hashtags.length !== uniqueHashtags.length) {
     return false;
   }
   return true;
 };
 
 const handleUserHashtagInput = () => {
-  const hashtagsArray = userHashtagInput.value.split(' ');
-  if (!testHashtagsArrayOnReg(hashtagsArray) && userHashtagInput.value !== '') {
+  const hashtags = userHashtagInput.value.split(' ');
+  if (!testHashtagsArrayOnReg(hashtags) && userHashtagInput.value !== '') {
     userHashtagInput.setCustomValidity(`- хэш-тег начинается с символа # (решётка);
     - строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;
     - хеш-тег не может состоять только из одной решётки;
     - максимальная длина одного хэш-тега 20 символов, включая решётку;
     - хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом;
     - хэш-теги разделяются пробелами;`);
-  } else if (hashtagsArray.length > MAX_HASHTAG_LENGTH) {
+  } else if (hashtags.length > MAX_HASHTAG_LENGTH) {
     userHashtagInput.setCustomValidity('Нельзя указывать больше пяти хэш-тегов');
-  } else if (!testHashtagsArrayOnUnique(hashtagsArray)) {
+  } else if (!testHashtagsArrayOnUnique(hashtags)) {
     userHashtagInput.setCustomValidity('Хеш-теги не должны повторяться');
   } else {
     userHashtagInput.setCustomValidity('');

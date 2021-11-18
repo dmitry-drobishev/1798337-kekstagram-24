@@ -9,7 +9,7 @@ const showFilters = () => {
 };
 
 // Функция возвращает 10 рандомных элементов массива
-const getRandomPosts = (array) => shuffleArray(array).slice(0, 10);
+const getRandomPosts = (posts) => shuffleArray(posts).slice(0, 10);
 
 // Функция очищает страницу от миниатюр фотографий
 const removeMinPictures = () => {
@@ -22,22 +22,22 @@ const removeMinPictures = () => {
 const comparePosts = (postA, postB) => postB.comments.length - postA.comments.length;
 
 // Функция сортировки по популярности
-const sortByPopular = (array) => array.slice().sort(comparePosts);
+const sortByPopular = (posts) => posts.slice().sort(comparePosts);
 
 // Функция выполняет сортировку миниатюр выбранным способом
-const sortPictures = (filterName, array) => {
+const sortPictures = (filterName, posts) => {
   switch (filterName) {
     case 'filter-default':
       removeMinPictures();
-      createMinPictures(array);
+      createMinPictures(posts);
       break;
     case 'filter-random':
       removeMinPictures();
-      createMinPictures(getRandomPosts(array));
+      createMinPictures(getRandomPosts(posts));
       break;
     case 'filter-discussed':
       removeMinPictures();
-      createMinPictures(sortByPopular(array));
+      createMinPictures(sortByPopular(posts));
       break;
   }
 };
@@ -46,13 +46,13 @@ const sortPictures = (filterName, array) => {
 const onSortButtonClick = debounce(sortPictures);
 
 // Функция работы фильтра
-const sortMinPictures = (array) => {
+const sortMinPictures = (posts) => {
   minPicturesFilter.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('img-filters__button') && !evt.target.classList.contains('img-filters__button--active')) {
       document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
       evt.target.classList.add('img-filters__button--active');
       const filterName = evt.target.id;
-      onSortButtonClick(filterName, array);
+      onSortButtonClick(filterName, posts);
     }
   });
 };

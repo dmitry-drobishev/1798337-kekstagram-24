@@ -2,10 +2,10 @@ const picture = document.querySelector('#picture').content;
 const patternPicture = picture.querySelector('.picture');
 const picturesContainer = document.querySelector('.pictures');
 
-const createMinPictures = (postsArray) => {
+const createMinPictures = (posts) => {
   const minImagesListFragment = document.createDocumentFragment();
 
-  postsArray.forEach((postData) => {
+  posts.forEach((postData) => {
     const newMinPicture = patternPicture.cloneNode(true);
     newMinPicture.querySelector('.picture__img').src = postData.url;
     newMinPicture.querySelector('.picture__likes').textContent = postData.likes;
