@@ -2,6 +2,9 @@ import { isEscKey } from '../utils/helpers.js';
 import { initSlider, handleRemoveSlider } from './slider.js';
 import { initScalePicture, removeScalePicture } from './scale-picture.js';
 import { sendData } from './api.js';
+
+const MAX_HASHTAG_LENGTH = 5;
+
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
 const siteBody = document.querySelector('body');
@@ -10,7 +13,6 @@ const closeModalButton = document.querySelector('#upload-cancel');
 const userCommentInput = document.querySelector('.text__description');
 const hashtagsRegexp =  /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const userHashtagInput = document.querySelector('.text__hashtags');
-const MAX_HASHTAG_LENGTH = 5;
 
 const closePopup = () => {
   photoModal.classList.add('hidden');

@@ -1,11 +1,12 @@
+const SCALE_STEP = 25;
+const MAX_SCALE = 100;
+const MIN_SCALE = 25;
+
 const imgUploadPopup = document.querySelector('.img-upload'); // попап с загрузкой нового изображения
 const scaleUpButton = imgUploadPopup.querySelector('.scale__control--bigger');
 const scaleDownButton = imgUploadPopup.querySelector('.scale__control--smaller');
 const scaleControlCounter = imgUploadPopup.querySelector('.scale__control--value');
 const uploadPicture = imgUploadPopup.querySelector('.img-upload__preview img');
-const SCALE_STEP = 25;
-const MAX_SCALE = 100;
-const MIN_SCALE = 25;
 
 const scaleUp = () => {
   let scaleNewValue = parseInt(scaleControlCounter.value, 10) + SCALE_STEP;

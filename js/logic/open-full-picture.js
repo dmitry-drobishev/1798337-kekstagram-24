@@ -1,5 +1,7 @@
 import { isEscKey } from '../utils/helpers.js';
 
+const COMMENTS_OFFSET = 5; // сколько комментариев загружать за раз
+
 const fullPicturePopup = document.querySelector('.big-picture'); // окна полноразмерного просмотра
 const minPictureContainer = document.querySelector('.pictures'); // миниатюры
 const closeFullPictureButton = document.querySelector('.big-picture__cancel'); // кнопка закрытия полноразмерного просмотра
@@ -9,7 +11,6 @@ const commentsContainer = fullPicturePopup.querySelector('.social__comments'); /
 const createCommentsButton = fullPicturePopup.querySelector('.comments-loader'); // кнопка «Загрузить ещё»
 const commentsLoaded = fullPicturePopup.querySelector('.comments-loaded'); // счетчик заказанных комментариев
 let lastCommentIndex = 0; // индекс последнего показанного комментрия
-const COMMENTS_OFFSET = 5; // сколько комментариев загружать за раз
 let currentPostComments = []; // комментарии к выбранному посту
 
 // Функция загружает 5 комментариев в фрагмент
