@@ -26,7 +26,7 @@ const getEffect = (effect, effectLevelValue) => {
   return sliderStyleFilters[effect];
 };
 
-const effectsListHandler = (evt) => {
+const effectChangeHandler = (evt) => {
   if (!evt.target.checked) { return; }
   uploadPicture.className = '';
   currentEffect = evt.target.value;
@@ -67,14 +67,14 @@ const initSlider = () => {
   });
 
   slider.classList.add('hidden');
-  effectsList.addEventListener('change', effectsListHandler);
+  effectsList.addEventListener('change', effectChangeHandler);
 };
 
 const handleRemoveSlider = () => {
   slider.noUiSlider.destroy();
   uploadPicture.className = '';
   uploadPicture.style = '';
-  effectsList.removeEventListener('change', effectsListHandler);
+  effectsList.removeEventListener('change', effectChangeHandler);
 };
 
 export { initSlider, handleRemoveSlider };

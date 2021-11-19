@@ -40,6 +40,10 @@ const addCommentsToPost = () => {
   commentsContainer.appendChild(createComments(currentPostComments));
 };
 
+const onCreateCommentsButtonClick = () => {
+  addCommentsToPost();
+};
+
 // Функция открывает пост
 const openFullPicture = (postId, posts) => {
   const post = posts[postId];
@@ -53,10 +57,10 @@ const openFullPicture = (postId, posts) => {
 
   commentsLoaded.textContent = lastCommentIndex;
   commentsContainer.innerHTML = '';
-  addCommentsToPost(currentPostComments);
+  addCommentsToPost();
   fullPicturePopup.classList.remove('hidden');
   siteBody.classList.add('modal-open');
-  createCommentsButton.addEventListener('click', addCommentsToPost);
+  createCommentsButton.addEventListener('click', onCreateCommentsButtonClick);
 };
 
 // Функция закрывает окно поста
@@ -64,7 +68,7 @@ const closePost = () => {
   fullPicturePopup.classList.add('hidden');
   siteBody.classList.remove('modal-open');
   createCommentsButton.classList.remove('hidden');
-  createCommentsButton.removeEventListener('click', addCommentsToPost);
+  createCommentsButton.removeEventListener('click', onCreateCommentsButtonClick);
 };
 
 // Функция закрытия окно при нажатии esc

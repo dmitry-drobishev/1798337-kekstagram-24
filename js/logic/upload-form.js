@@ -21,14 +21,15 @@ const closePopup = () => {
   formModal.reset();
   handleRemoveSlider();
   removeScalePicture();
+  document.removeEventListener('keydown', onModalEscKeydown);
 };
 
-const onModalEscKeydown = (evt) => {
+function onModalEscKeydown (evt) {
   if (isEscKey(evt)) {
     evt.preventDefault();
     closePopup();
   }
-};
+}
 
 const onOpenModalButtonClick = () => {
   photoModal.classList.remove('hidden');
@@ -38,9 +39,8 @@ const onOpenModalButtonClick = () => {
   initScalePicture();
 };
 
-const closePhotoModal = () => {
+const onCloseModalButtonClick = () => {
   closePopup();
-  document.removeEventListener('keydown', onModalEscKeydown);
 };
 
 const stopEscEvent = (evt) => {
@@ -171,7 +171,7 @@ const setUserFormSubmit = () => {
       showSuccessPopup,
       showFailPopup,
     );
-    closePhotoModal();
+    closePopup();
   });
 };
 
@@ -179,7 +179,7 @@ const setUserFormSubmit = () => {
 const initUploadForm = () => {
   openModalButton.addEventListener('change', onOpenModalButtonClick);
 
-  closeModalButton.addEventListener('click', closePhotoModal);
+  closeModalButton.addEventListener('click', onCloseModalButtonClick);
 
   userCommentInput.addEventListener('keydown', (evt) => {
     stopEscEvent(evt);
