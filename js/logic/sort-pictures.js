@@ -1,15 +1,12 @@
 import { createMinPictures } from './create-min-pictures.js';
-import { shuffleArray } from '../utils/helpers.js';
 import { debounce } from '../utils/debounce.js';
+import { getRandomPosts} from '../utils/helpers.js';
 const minPicturesFilter = document.querySelector('.img-filters');
 
 // Функция показывает блок с фильтром
 const showFilters = () => {
   minPicturesFilter.classList.remove('img-filters--inactive');
 };
-
-// Функция возвращает 10 рандомных элементов массива
-const getRandomPosts = (posts) => shuffleArray(posts).slice(0, 10);
 
 // Функция очищает страницу от миниатюр фотографий
 const removeMinPictures = () => {
