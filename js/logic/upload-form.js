@@ -30,7 +30,7 @@ const onModalEscKeydown = (evt) => {
   }
 };
 
-const openPhotoModal = () => {
+const onOpenModalButtonClick = () => {
   photoModal.classList.remove('hidden');
   siteBody.classList.add('.modal-open');
   document.addEventListener('keydown', onModalEscKeydown);
@@ -65,7 +65,7 @@ const testHashtagsArrayOnUnique = (hashtags) => {
   return hashtags.length === uniqueHashtags.length;
 };
 
-const handleUserHashtagInput = () => {
+const userHashtagInputHandler = () => {
   const hashtags = userHashtagInput.value.split(' ');
   if (!testHashtagsArrayOnReg(hashtags) && userHashtagInput.value !== '') {
     userHashtagInput.setCustomValidity(`- хэш-тег начинается с символа # (решётка);
@@ -177,7 +177,7 @@ const setUserFormSubmit = () => {
 
 // Функция для работы с формой загрузки изображения
 const initUploadForm = () => {
-  openModalButton.addEventListener('change', openPhotoModal);
+  openModalButton.addEventListener('change', onOpenModalButtonClick);
 
   closeModalButton.addEventListener('click', closePhotoModal);
 
@@ -189,7 +189,7 @@ const initUploadForm = () => {
     stopEscEvent(evt);
   });
 
-  userHashtagInput.addEventListener('input', handleUserHashtagInput);
+  userHashtagInput.addEventListener('input', userHashtagInputHandler);
 
   setUserFormSubmit();
 };
