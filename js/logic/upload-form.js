@@ -2,6 +2,9 @@ import { isEscKey } from '../utils/helpers.js';
 import { initSlider, handleRemoveSlider } from './slider.js';
 import { initScalePicture, removeScalePicture } from './scale-picture.js';
 import { sendData } from './api.js';
+
+const MAX_HASHTAG_LENGTH = 5;
+
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
 const siteBody = document.querySelector('body');
@@ -10,7 +13,6 @@ const closeModalButton = document.querySelector('#upload-cancel');
 const userCommentInput = document.querySelector('.text__description');
 const hashtagsRegexp =  /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const userHashtagInput = document.querySelector('.text__hashtags');
-const MAX_HASHTAG_LENGTH = 5;
 
 const closePopup = () => {
   photoModal.classList.add('hidden');
@@ -19,16 +21,17 @@ const closePopup = () => {
   formModal.reset();
   handleRemoveSlider();
   removeScalePicture();
+  document.removeEventListener('keydown', onModalEscKeydown);
 };
 
-const onModalEscKeydown = (evt) => {
+function onModalEscKeydown (evt) {
   if (isEscKey(evt)) {
     evt.preventDefault();
     closePopup();
   }
-};
+}
 
-const openPhotoModal = () => {
+const onOpenModalButtonClick = () => {
   photoModal.classList.remove('hidden');
   siteBody.classList.add('.modal-open');
   document.addEventListener('keydown', onModalEscKeydown);
@@ -36,9 +39,8 @@ const openPhotoModal = () => {
   initScalePicture();
 };
 
-const closePhotoModal = () => {
+const onCloseModalButtonClick = () => {
   closePopup();
-  document.removeEventListener('keydown', onModalEscKeydown);
 };
 
 const stopEscEvent = (evt) => {
@@ -47,9 +49,9 @@ const stopEscEvent = (evt) => {
   }
 };
 
-const testHashtagsArrayOnReg = (hashtagsArray) => {
-  for (let i = 0; i < hashtagsArray.length; i++) {
-    if (!hashtagsRegexp.test(hashtagsArray[i])) {
+const testHashtagsArrayOnReg = (hashtags) => {
+  for (let i = 0; i < hashtags.length; i++) {
+    if (!hashtagsRegexp.test(hashtags[i])) {
 
       return false;
     }
@@ -57,26 +59,24 @@ const testHashtagsArrayOnReg = (hashtagsArray) => {
   return true;
 };
 
-const testHashtagsArrayOnUnique = (hashtagsArray) => {
-  const uniqueHashtags = Array.from(new Set(hashtagsArray));
-  if (hashtagsArray.length !== uniqueHashtags.length) {
-    return false;
-  }
-  return true;
+const testHashtagsArrayOnUnique = (hashtags) => {
+  const newHashtags = hashtags.map((hashtag) => hashtag.toLowerCase());
+  const uniqueHashtags = Array.from(new Set(newHashtags));
+  return hashtags.length === uniqueHashtags.length;
 };
 
-const handleUserHashtagInput = () => {
-  const hashtagsArray = userHashtagInput.value.split(' ');
-  if (!testHashtagsArrayOnReg(hashtagsArray) && userHashtagInput.value !== '') {
+const userHashtagInputHandler = () => {
+  const hashtags = userHashtagInput.value.split(' ');
+  if (!testHashtagsArrayOnReg(hashtags) && userHashtagInput.value !== '') {
     userHashtagInput.setCustomValidity(`- хэш-тег начинается с символа # (решётка);
     - строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;
     - хеш-тег не может состоять только из одной решётки;
     - максимальная длина одного хэш-тега 20 символов, включая решётку;
     - хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом;
     - хэш-теги разделяются пробелами;`);
-  } else if (hashtagsArray.length > MAX_HASHTAG_LENGTH) {
+  } else if (hashtags.length > MAX_HASHTAG_LENGTH) {
     userHashtagInput.setCustomValidity('Нельзя указывать больше пяти хэш-тегов');
-  } else if (!testHashtagsArrayOnUnique(hashtagsArray)) {
+  } else if (!testHashtagsArrayOnUnique(hashtags)) {
     userHashtagInput.setCustomValidity('Хеш-теги не должны повторяться');
   } else {
     userHashtagInput.setCustomValidity('');
@@ -171,15 +171,15 @@ const setUserFormSubmit = () => {
       showSuccessPopup,
       showFailPopup,
     );
-    closePhotoModal();
+    closePopup();
   });
 };
 
 // Функция для работы с формой загрузки изображения
 const initUploadForm = () => {
-  openModalButton.addEventListener('change', openPhotoModal);
+  openModalButton.addEventListener('change', onOpenModalButtonClick);
 
-  closeModalButton.addEventListener('click', closePhotoModal);
+  closeModalButton.addEventListener('click', onCloseModalButtonClick);
 
   userCommentInput.addEventListener('keydown', (evt) => {
     stopEscEvent(evt);
@@ -189,7 +189,7 @@ const initUploadForm = () => {
     stopEscEvent(evt);
   });
 
-  userHashtagInput.addEventListener('input', handleUserHashtagInput);
+  userHashtagInput.addEventListener('input', userHashtagInputHandler);
 
   setUserFormSubmit();
 };

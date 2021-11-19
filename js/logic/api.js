@@ -2,8 +2,8 @@
 const getData = (onSuccess, onFail) => {
   fetch('https://24.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
-    .then((postsArray) => {
-      onSuccess(postsArray);
+    .then((posts) => {
+      onSuccess(posts);
     })
     .catch(() => {
       onFail('Не удалось загрузить данные c сервера.');

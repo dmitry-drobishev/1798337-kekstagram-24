@@ -5,11 +5,11 @@ import { getData } from './logic/api.js';
 import { showAlert } from './logic/show-alert.js';
 import { showFilters, sortMinPictures } from './logic/sort-pictures.js';
 
-const initContent = (postsArray) => {
-  createMinPictures(postsArray);
-  initPostsPreviews(postsArray);
+const initContent = (posts) => {
+  createMinPictures(posts);
+  initPostsPreviews(posts);
   showFilters();
-  sortMinPictures(postsArray);
+  sortMinPictures(posts);
 };
 
 initUploadForm();

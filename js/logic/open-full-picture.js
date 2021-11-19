@@ -1,5 +1,7 @@
 import { isEscKey } from '../utils/helpers.js';
 
+const COMMENTS_OFFSET = 5; // сколько комментариев загружать за раз
+
 const fullPicturePopup = document.querySelector('.big-picture'); // окна полноразмерного просмотра
 const minPictureContainer = document.querySelector('.pictures'); // миниатюры
 const closeFullPictureButton = document.querySelector('.big-picture__cancel'); // кнопка закрытия полноразмерного просмотра
@@ -9,15 +11,14 @@ const commentsContainer = fullPicturePopup.querySelector('.social__comments'); /
 const createCommentsButton = fullPicturePopup.querySelector('.comments-loader'); // кнопка «Загрузить ещё»
 const commentsLoaded = fullPicturePopup.querySelector('.comments-loaded'); // счетчик заказанных комментариев
 let lastCommentIndex = 0; // индекс последнего показанного комментрия
-const COMMENTS_OFFSET = 5; // сколько комментариев загружать за раз
-let currentPostCommentsArray = []; // комментарии к выбранному посту
+let currentPostComments = []; // комментарии к выбранному посту
 
 // Функция загружает 5 комментариев в фрагмент
-const createComments = (commentsArray) => {
-  const comments = commentsArray.slice(lastCommentIndex, lastCommentIndex + COMMENTS_OFFSET);
+const createComments = (comments) => {
+  const sliceComments = comments.slice(lastCommentIndex, lastCommentIndex + COMMENTS_OFFSET);
   const commentsFragment = document.createDocumentFragment();
 
-  comments.forEach((comment) => {
+  sliceComments.forEach((comment) => {
     const newComment = commentPattern.cloneNode(true);
     newComment.querySelector('.social__picture').src = comment.avatar;
     newComment.querySelector('.social__picture').alt = comment.name;
@@ -27,7 +28,7 @@ const createComments = (commentsArray) => {
 
   lastCommentIndex = lastCommentIndex + commentsFragment.childElementCount;
 
-  if (lastCommentIndex >= commentsArray.length) {
+  if (lastCommentIndex >= comments.length) {
     createCommentsButton.classList.add('hidden');
   }
   commentsLoaded.textContent = lastCommentIndex;
@@ -36,13 +37,17 @@ const createComments = (commentsArray) => {
 
 // Функция добавляет фрагмент комментариев в пост
 const addCommentsToPost = () => {
-  commentsContainer.appendChild(createComments(currentPostCommentsArray));
+  commentsContainer.appendChild(createComments(currentPostComments));
+};
+
+const onCreateCommentsButtonClick = () => {
+  addCommentsToPost();
 };
 
 // Функция открывает пост
-const openFullPicture = (postId, postsArray) => {
-  const post = postsArray[postId];
-  currentPostCommentsArray = post.comments;
+const openFullPicture = (postId, posts) => {
+  const post = posts[postId];
+  currentPostComments = post.comments;
   lastCommentIndex = 0;
 
   fullPicturePopup.querySelector('.big-picture__img > img').src = post.url;
@@ -52,10 +57,10 @@ const openFullPicture = (postId, postsArray) => {
 
   commentsLoaded.textContent = lastCommentIndex;
   commentsContainer.innerHTML = '';
-  addCommentsToPost(currentPostCommentsArray);
+  addCommentsToPost();
   fullPicturePopup.classList.remove('hidden');
   siteBody.classList.add('modal-open');
-  createCommentsButton.addEventListener('click', addCommentsToPost);
+  createCommentsButton.addEventListener('click', onCreateCommentsButtonClick);
 };
 
 // Функция закрывает окно поста
@@ -63,33 +68,33 @@ const closePost = () => {
   fullPicturePopup.classList.add('hidden');
   siteBody.classList.remove('modal-open');
   createCommentsButton.classList.remove('hidden');
-  createCommentsButton.removeEventListener('click', addCommentsToPost);
+  createCommentsButton.removeEventListener('click', onCreateCommentsButtonClick);
+  document.removeEventListener('keydown', onPostEscKeydown);
 };
 
 // Функция закрытия окно при нажатии esc
-const onPostEscKeydown = (evt) => {
+function onPostEscKeydown (evt) {
   if (isEscKey(evt)) {
     closePost();
     document.removeEventListener('keydown', onPostEscKeydown);
   }
-};
+}
 
 // Функция закрытия поста
-const closeFullPicture = () => {
+const onCloseFullPictureButtonClick = () => {
   closePost();
-  document.removeEventListener('keydown', onPostEscKeydown);
 };
 
-const initPostsPreviews = (postsArray) => {
+const initPostsPreviews = (posts) => {
   minPictureContainer.addEventListener('click', (evt) => {
     if (evt.target.closest('.picture') && !evt.target.closest('.picture__info')) {
       const postId = evt.target.getAttribute('data-id');
-      openFullPicture(postId, postsArray);
+      openFullPicture(postId, posts);
       document.addEventListener('keydown', onPostEscKeydown);
     }
   });
 
-  closeFullPictureButton.addEventListener('click', closeFullPicture);
+  closeFullPictureButton.addEventListener('click', onCloseFullPictureButtonClick);
 };
 
 export { initPostsPreviews };

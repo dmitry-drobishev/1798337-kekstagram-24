@@ -1,9 +1,3 @@
-const imgUploadPopup = document.querySelector('.img-upload'); // попап с загрузкой нового изображения
-const effectLevel = document.querySelector('.effect-level__value');
-const effectsList = document.querySelector('.effects__list');
-const uploadPicture = imgUploadPopup.querySelector('.img-upload__preview img');
-const slider = document.querySelector('.effect-level__slider');
-let currentEffect = 'none';
 const SLIDER_OPTIONS = {
   chrome: { range: { min: 0, max: 1 }, start: 1, step: 0.1 },
   sepia: { range: { min: 0, max: 1 }, start: 1, step: 0.1 },
@@ -13,8 +7,15 @@ const SLIDER_OPTIONS = {
   none: {},
 };
 
+const imgUploadPopup = document.querySelector('.img-upload'); // попап с загрузкой нового изображения
+const effectLevel = document.querySelector('.effect-level__value');
+const effectsList = document.querySelector('.effects__list');
+const uploadPicture = imgUploadPopup.querySelector('.img-upload__preview img');
+const slider = document.querySelector('.effect-level__slider');
+let currentEffect = 'none';
+
 const getEffect = (effect, effectLevelValue) => {
-  const SLIDER_STYLE_FILTERS = {
+  const sliderStyleFilters = {
     chrome: `grayscale(${effectLevelValue})`,
     sepia: `sepia(${effectLevelValue})`,
     marvin: `invert(${effectLevelValue}%)`,
@@ -22,10 +23,10 @@ const getEffect = (effect, effectLevelValue) => {
     heat: `brightness(${effectLevelValue})`,
     none: 'none',
   };
-  return SLIDER_STYLE_FILTERS[effect];
+  return sliderStyleFilters[effect];
 };
 
-const handleEffectChange = (evt) => {
+const effectChangeHandler = (evt) => {
   if (!evt.target.checked) { return; }
   uploadPicture.className = '';
   currentEffect = evt.target.value;
@@ -66,14 +67,14 @@ const initSlider = () => {
   });
 
   slider.classList.add('hidden');
-  effectsList.addEventListener('change', handleEffectChange);
+  effectsList.addEventListener('change', effectChangeHandler);
 };
 
 const handleRemoveSlider = () => {
   slider.noUiSlider.destroy();
   uploadPicture.className = '';
   uploadPicture.style = '';
-  effectsList.removeEventListener('change', handleEffectChange);
+  effectsList.removeEventListener('change', effectChangeHandler);
 };
 
 export { initSlider, handleRemoveSlider };
