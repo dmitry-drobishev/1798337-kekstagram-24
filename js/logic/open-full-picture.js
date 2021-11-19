@@ -69,20 +69,20 @@ const closePost = () => {
   siteBody.classList.remove('modal-open');
   createCommentsButton.classList.remove('hidden');
   createCommentsButton.removeEventListener('click', onCreateCommentsButtonClick);
+  document.removeEventListener('keydown', onPostEscKeydown);
 };
 
 // Функция закрытия окно при нажатии esc
-const onPostEscKeydown = (evt) => {
+function onPostEscKeydown (evt) {
   if (isEscKey(evt)) {
     closePost();
     document.removeEventListener('keydown', onPostEscKeydown);
   }
-};
+}
 
 // Функция закрытия поста
-const closeFullPicture = () => {
+const onCloseFullPictureButtonClick = () => {
   closePost();
-  document.removeEventListener('keydown', onPostEscKeydown);
 };
 
 const initPostsPreviews = (posts) => {
@@ -94,7 +94,7 @@ const initPostsPreviews = (posts) => {
     }
   });
 
-  closeFullPictureButton.addEventListener('click', closeFullPicture);
+  closeFullPictureButton.addEventListener('click', onCloseFullPictureButtonClick);
 };
 
 export { initPostsPreviews };
