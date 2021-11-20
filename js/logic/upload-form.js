@@ -4,6 +4,8 @@ import { initScalePicture, removeScalePicture } from './scale-picture.js';
 import { sendData } from './api.js';
 
 const MAX_HASHTAG_LENGTH = 5;
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 
 const photoModal = document.querySelector('.img-upload__overlay');
 const formModal = document.querySelector('#upload-select-image');
@@ -13,6 +15,7 @@ const closeModalButton = document.querySelector('#upload-cancel');
 const userCommentInput = document.querySelector('.text__description');
 const hashtagsRegexp =  /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const userHashtagInput = document.querySelector('.text__hashtags');
+const uploadPicture = formModal.querySelector('.img-upload__preview img');
 
 const closePopup = () => {
   photoModal.classList.add('hidden');
@@ -35,6 +38,15 @@ const onOpenModalButtonClick = () => {
   photoModal.classList.remove('hidden');
   siteBody.classList.add('.modal-open');
   document.addEventListener('keydown', onModalEscKeydown);
+
+  const file = openModalButton.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
+
+  if (matches) {
+    uploadPicture.src = URL.createObjectURL(file);
+  }
+
   initSlider();
   initScalePicture();
 };
